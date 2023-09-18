@@ -24,46 +24,39 @@
 
 // export default App;
 
-// import React from 'react';
-import PropertyListingPage from './PropertyListingPage';
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-
-// function App() {
-//   return (
-//     <div className="App">
-//       <PropertyListingPage />
-//     </div>
-//   );
-// }
+import './App.css'; // Import your CSS file for styling
 
 const App = () => {
   const [properties, setProperties] = useState([]);
 
   useEffect(() => {
-    axios.get('http://127.0.0.1:5000/api/properties')
-      .then(response => {
-        console.log('Response:', response.data);
-        setProperties(response.data);
+    fetch('http://localhost:5000/api/property')
+      .then(response => response.json())
+      .then(data => {
+        console.log('Data:', data);
+        setProperties(data);
       })
       .catch(error => console.error(error));
   }, []);
-  
 
   return (
-    <div>
+    <div className="property-grid">
       {properties.map(property => (
-      <div key={property._id}>
-        <h2>{property.ID}</h2>
-        <h2>{property.size_sq_ft}</h2>
-        <h2>{property.propertyType}</h2>
-        {/* Add other property details here */}
-      </div>
-    ))}
-      {/* Render your properties here */}
+        <div className="property-card" key={property._id}>
+          <h2>ID: {property.ID}</h2>
+          <p>Size: {property.size_sq_ft} sq ft</p>
+          <p>Property Type: {property.propertyType}</p>
+          <p>Bedrooms: {property.bedrooms}</p>
+          <p>Locality: {property.localityName}</p>
+          <p>City: {property.cityName}</p>
+          <p>Price: {property.price}</p>
+          <p>Company: {property.companyName}</p>
+          <p>Society: {property.society}</p>
+        </div>
+      ))}
     </div>
   );
 };
 
 export default App;
-

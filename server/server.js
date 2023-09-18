@@ -1,93 +1,59 @@
-// server.js
-
+// Import necessary modules
 const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
 const mongoose = require('mongoose');
+const cors = require('cors');
 
+// Set up Express app
 const app = express();
-
-// Middleware
+app.use(express.json());
 app.use(cors());
-app.use(bodyParser.json());
 
-// Connect to MongoDB (make sure MongoDB is running locally)
+// Connect to MongoDB
 mongoose.connect('mongodb://127.0.0.1:27017/PropertyListing', { useNewUrlParser: true, useUnifiedTopology: true });
-
 const db = mongoose.connection;
 
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 db.once('open', () => {
-  console.log('Connected to database');
+  console.log('Connected to MongoDB');
 });
 
-// Define Mongoose Schema for Property (adjust as per your actual schema)
+// Define the property schema and model
 const propertySchema = new mongoose.Schema({
-  // Define your property schema fields here
-  // For example: name, location, availableFrom, price, propertyType
+  
+  ID: Number,
+  size_sq_ft: Number,
+  propertyType: String,
+  bedrooms: Number,
+  localityName: String,
+  cityName: String,
+  price: Number,
+  companyName: String,
+  society: String
+  // Add other properties as needed
 });
 
-const Property = mongoose.model('Property', propertySchema);
+const Property = mongoose.model('property', propertySchema);
 
-// Routes
-
-// Fetch all available properties
-app.get('/api/list-properties', (req, res) => {
-  // Fetch properties from the database and send them as JSON response
-  Property.find({}, (err, properties) => {
-    if (err) {
-      res.status(500).send(err);
-    } else {
-      res.json(properties);
-    }
-  });
+app.get('/api', (req, res) => {
+  res.send('Welcome to the Property Listing API'); // You can customize this message
 });
 
-// Add a property
-app.post('/api/property', (req, res) => {
-  // Extract property details from request body and create a new property
-  const newProperty = new Property(req.body);
-  newProperty.save((err) => {
-    if (err) {
-      res.status(500).send(err);
-    } else {
-      res.sendStatus(201);
-    }
-  });
+// Define API routes
+app.get('/api/property', async (req, res) => {
+  try {
+    // const properties = await Property.find({});
+    const properties = await db.collection('property').find({}).toArray();
+    console.log('Properties:', properties);
+    res.json(properties);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
 
-// Update a property
-app.put('/api/property/:id', (req, res) => {
-  // Update the property with the given ID using req.body
-  // Make sure to handle errors and respond appropriately
-});
-
-// Delete a property
-app.delete('/api/property/:id', (req, res) => {
-  // Delete the property with the given ID
-  // Make sure to handle errors and respond appropriately
-});
-
-// List my properties
-app.get('/api/property', (req, res) => {
-  // Get properties owned by the authenticated user (you'll need to implement authentication)
-  // Make sure to handle errors and respond appropriately
-});
-
-// Signup endpoint
-app.post('/api/signup', (req, res) => {
-  // Handle user registration
-  // Make sure to validate the email format and save user details to your database
-});
-
-// Login endpoint (assuming you're using JWT for authentication)
-app.post('/api/login', (req, res) => {
-  // Handle user login, generate JWT token, and send it in the response
-  // Make sure to validate user credentials
-});
+// Add routes for adding, updating, and deleting properties if needed
 
 // Start the server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
-
