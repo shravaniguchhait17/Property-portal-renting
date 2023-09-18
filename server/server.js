@@ -28,21 +28,22 @@ const propertySchema = new mongoose.Schema({
   cityName: String,
   price: Number,
   companyName: String,
-  society: String
+  society: String,
+  availableFrom: String
   // Add other properties as needed
 });
 
-const Property = mongoose.model('property', propertySchema);
+const Property = mongoose.model('properties', propertySchema);
 
 app.get('/api', (req, res) => {
   res.send('Welcome to the Property Listing API'); // You can customize this message
 });
 
 // Define API routes
-app.get('/api/property', async (req, res) => {
+app.get('/api/properties', async (req, res) => {
   try {
     // const properties = await Property.find({});
-    const properties = await db.collection('property').find({}).toArray();
+    const properties = await db.collection('properties').find({}).toArray();
     console.log('Properties:', properties);
     res.json(properties);
   } catch (error) {

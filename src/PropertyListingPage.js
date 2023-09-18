@@ -1,67 +1,55 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+// import React, { useState } from 'react';
+// import LocationDropdown from './LocationDropdown';
+// import DateCalendar from './DateCalendar';
+// import PriceRangeSlider from './PriceRangeSlider';
+// import PropertyTypeDropdown from './PropertyTypeDropdown';
 
-const PropertyListingPage = () => {
-  const [properties, setProperties] = useState([]);
-  const [filters, setFilters] = useState({
-    location: '',
-    availableFrom: '',
-    priceRange: [0, 1000], // Example range, you can adjust it
-    propertyType: '',
-  });
+// const PropertyListingPage = ({ applyFilters }) => {
+//   const [filters, setFilters] = useState({
+//     location: '',
+//     availableDate: null,
+//     minPrice: 0,
+//     maxPrice: 1000000, 
+//     propertyType: '',
+//   });
 
-  useEffect(() => {
-    // Fetch properties when component mounts
-    axios.get('/api/list-properties')
-      .then(response => setProperties(response.data))
-      .catch(error => console.error(error));
-  }, []);
+//   const handleApplyFilters = () => {
+//     const filterQuery = `http://localhost:5000/api/properties?location=${filters.location}&availableDate=${filters.availableDate}&minPrice=${filters.minPrice}&maxPrice=${filters.maxPrice}&propertyType=${filters.propertyType}`;
+//     console.log('Filter Query:', filterQuery);
 
-  const handleFilterChange = (event) => {
-    const { name, value } = event.target;
-    setFilters({ ...filters, [name]: value });
-  };
+//     fetch(filterQuery)
+//       .then(response => response.json())
+//       .then(data => {
+//         console.log('Filtered Data:', data);
+//         applyFilters(data); // Pass the filtered data to the parent component
+//       })
+//       .catch(error => console.error(error));
+//   };
 
-  // Additional filtering logic goes here
+//   return (
+//     <div>
+//       <h1>Property Listings</h1>
+//       <LocationDropdown
+//         cities={['Mumbai', 'Delhi', 'Pune']} 
+//         onLocationChange={location => setFilters({ ...filters, location })}
+//       />
+//       <DateCalendar
+//         onDateChange={(fromDate, toDate) => setFilters({ ...filters, fromDate, toDate })}
+//       />
+//       <PriceRangeSlider
+//         minPrice={filters.minPrice}
+//         maxPrice={filters.maxPrice}
+//         onPriceChange={(minPrice, maxPrice) => setFilters({ ...filters, minPrice, maxPrice })}
+//       />
+//       <PropertyTypeDropdown
+//         propertyTypes={['Apartment', 'Independent Floor']} 
+//         onPropertyTypeChange={propertyType => setFilters({ ...filters, propertyType })}
+//       />
+//       <button onClick={handleApplyFilters}>Apply Filters</button>
+//     </div>
+//   );
+// };
 
-  return (
-    <div>
-      <h1>Property Listings</h1>
-      <div>
-        <label>Location:</label>
-        <select name="location" value={filters.location} onChange={handleFilterChange}>
-          <option value="">Any</option>
-          {/* Populate options dynamically */}
-        </select>
-      </div>
-      <div>
-        <label>Available from:</label>
-        <input type="date" name="availableFrom" value={filters.availableFrom} onChange={handleFilterChange} />
-      </div>
-      <div>
-        <label>Price Range:</label>
-        <input type="range" name="priceRange" min="0" max="1000" value={filters.priceRange[1]} onChange={handleFilterChange} />
-      </div>
-      <div>
-        <label>Property Type:</label>
-        <select name="propertyType" value={filters.propertyType} onChange={handleFilterChange}>
-          <option value="">Any</option>
-          {/* Populate options dynamically */}
-        </select>
-      </div>
-      <div>
-        <button>Apply Filters</button>
-      </div>
-      <div>
-        {properties.map(property => (
-          <div key={property.id}>
-            <h3>{property.name}</h3>
-            {/* Display property details */}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
+// export default PropertyListingPage;
 
-export default PropertyListingPage;
+

@@ -49,6 +49,18 @@
   max-width: 300px;
 }
 
+@media screen and (max-width: 768px) {
+  /* Styles for smaller screens */
+  body {
+    font-size: 14px; /* Decrease font size for better readability on smaller screens */
+  }
+
+  .property-card {
+    margin-bottom: 10px; /* Increase space between property cards */
+  }
+}
+
+
 
 
 
